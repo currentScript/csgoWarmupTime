@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+interface TimeInterface {
+  minutes: number;
+  seconds: number;
+}
 
 export default function App() {
-  const [time, setTime] = useState("");
+  const [rerender, callRerender] = useState(false);
+  const [time, setTime] = useState<TimeInterface>({ minutes: 0, seconds: 0 });
   const [ending, setEnding] = useState(false);
 
-  // * WAITING FOR PLAYERS 4:33
-  // * WARUMUP ENDING 0:05
-  // * MATCH STARTING IN 1...
   const text1regex = /WAITING FOR PLAYERS/;
   const text2regex = /WARMUP ENDING/;
   const text3regex = /MATCH STARTING/;
@@ -17,22 +20,29 @@ export default function App() {
     const ws = new WebSocket("ws://192.168.178.59:2211");
 
     ws.onmessage = ({ data }) => {
-      console.log(data);
       if (text1regex.test(data) || text2regex.test(data) || text3regex.test(data)) {
-        if (text2regex.test(data)) {
-          setEnding(true);
-        }
-        setTime(data);
+        data = data.replace(/WAITING FOR PLAYERS /i, ""); // only get the time
+        let minutes = +data.split(":")[0];
+        let seconds = +data.split(":")[1];
+
+        if (minutes == 0) setEnding(true);
+
+        setTime({ minutes, seconds });
       }
     };
-  }, []);
+  }, [rerender]);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
 
-      <Text style={ending ? styles.warumupEnding : styles.timeInfo}>{time}</Text>
-      <Button onPress={() => setEnding(false)} title="remove warning" />
+      <Text style={ending ? styles.warumupEnding : styles.timeInfo}>{`${time.minutes}:${time.seconds}`}</Text>
+      <Pressable onPress={() => setEnding(false)} style={styles.resetButton}>
+        <Text style={styles.buttonText}>remove warning</Text>
+      </Pressable>
+      <Pressable onPress={() => callRerender(!rerender)} style={styles.resetButton}>
+        <Text style={styles.buttonText}>reconnect</Text>
+      </Pressable>
     </View>
   );
 }
@@ -45,10 +55,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   timeInfo: {
+    marginTop: "auto",
+    fontSize: 75,
+    fontWeight: "bold",
     color: "#000",
   },
   warumupEnding: {
-    color: "#f00",
+    marginTop: "auto",
+    fontSize: 75,
     fontWeight: "bold",
+    color: "#f00",
+  },
+  resetButton: {
+    marginTop: "auto",
+    marginBottom: 50,
+    padding: 15,
+    backgroundColor: "#e83846",
+    borderRadius: 15,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20,
   },
 });
