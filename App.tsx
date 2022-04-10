@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import Countdown from "react-countdown";
-import { CountdownComponent } from "./CountdownComponent";
+import { CountdownComponent } from "./components/CountdownComponent";
+import { SvgBubbles } from "./components/SvgBubbles";
 
 interface TimeInterface {
   minutes: number;
@@ -26,6 +26,8 @@ export default function App() {
     ws.onmessage = ({ data }) => {
       if (text1regex.test(data) || text2regex.test(data) || text3regex.test(data)) {
         data = data.replace(/WAITING FOR PLAYERS /i, ""); // only get the time
+        data = data.replace(/ /i, "");
+        console.log(data);
         let minutes = +data.split(":")[0];
         let seconds = +data.split(":")[1];
 
@@ -48,64 +50,97 @@ export default function App() {
     };
   }, [rerender]);
 
-  useEffect(() => {});
-
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
 
-      {isCountdownTimeSet && (
-        <Text style={ending ? styles.warumupEnding : styles.timeInfo}>
-          <CountdownComponent minutes={time.minutes} seconds={time.seconds} />
-        </Text>
-      )}
-      {!isCountdownTimeSet && <Text style={ending ? styles.warumupEnding : styles.timeInfo}>00:00:00</Text>}
+      <View style={styles.countdownView}>
+        {isCountdownTimeSet && (
+          <Text style={styles.timeInfo}>
+            <CountdownComponent minutes={time.minutes} seconds={time.seconds} />
+          </Text>
+        )}
+        {!isCountdownTimeSet && <Text style={styles.timeInfo}>00:00:00</Text>}
+        <SvgBubbles isEnding={ending} />
+      </View>
 
-      <Pressable onPress={() => setEnding(false)} style={styles.resetButton}>
-        <Text style={styles.buttonText}>remove warning</Text>
-      </Pressable>
+      <View style={styles.buttonView}>
+        <Pressable
+          onPress={() => {
+            callRerender(!rerender);
+            setIsCountdownTimeSet(false);
+            setEnding(false);
+          }}
+          style={[styles.button, styles.reconnectButton]}
+        >
+          <Text style={styles.buttonText}>Reconnect</Text>
+        </Pressable>
 
-      <Pressable
-        onPress={() => {
-          callRerender(!rerender);
-          setIsCountdownTimeSet(false);
-        }}
-        style={styles.resetButton}
-      >
-        <Text style={styles.buttonText}>reconnect</Text>
-      </Pressable>
+        <Pressable onPress={() => setEnding(false)} style={[styles.button, styles.removeWarningButton]}>
+          <Text style={styles.buttonText}>Remove Warning</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: "100%",
+    backgroundColor: "#191C2B",
+    overflow: "hidden",
+  },
+  countdownView: {
+    width: 300,
+    height: 300,
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    margin: "auto",
+    position: "relative",
+    marginTop: "45%",
   },
   timeInfo: {
-    marginTop: "auto",
-    fontSize: 75,
+    fontSize: 45,
     fontWeight: "bold",
-    color: "#000",
+    color: "#fff",
+    zIndex: 22,
+    borderRadius: 11111,
+    backgroundColor: "#191C2B",
+    width: 250,
+    height: 250,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
-  warumupEnding: {
-    marginTop: "auto",
-    fontSize: 75,
-    fontWeight: "bold",
-    color: "#f00",
+  buttonView: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: "5%",
   },
-  resetButton: {
-    marginTop: "auto",
-    marginBottom: 50,
+  button: {
+    width: 175,
     padding: 15,
-    backgroundColor: "#e83846",
     borderRadius: 15,
   },
+  removeWarningButton: {
+    backgroundColor: "#E851534D",
+    borderColor: "#E85153",
+    borderWidth: 2,
+  },
+  reconnectButton: {
+    backgroundColor: "#E85153",
+  },
   buttonText: {
+    height: "auto",
     color: "#fff",
-    fontSize: 20,
+    fontSize: 18,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
 });
