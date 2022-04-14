@@ -87,7 +87,9 @@ export default function App() {
               {
                 borderColor: borderopacityAnim.interpolate({
                   inputRange: [0, 0.5, 1],
-                  outputRange: ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"],
+                  outputRange: ending
+                    ? ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"]
+                    : ["rgba(255, 255, 255, 0.8)", "rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0.8)"],
                 }),
               },
             ]}
@@ -102,7 +104,9 @@ export default function App() {
               {
                 borderColor: borderopacityAnim.interpolate({
                   inputRange: [0, 0.5, 1],
-                  outputRange: ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"],
+                  outputRange: ending
+                    ? ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"]
+                    : ["rgba(255, 255, 255, 0.8)", "rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0.8)"],
                 }),
               },
             ]}
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
-    height: "100%",
+    minHeight: "100%",
     backgroundColor: "#191C2B",
     overflow: "hidden",
   },
@@ -151,7 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: "auto",
     position: "relative",
-    marginTop: "45%",
   },
   timeInfo: {
     fontSize: 45,
@@ -167,11 +170,11 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   buttonView: {
-    width: "100%",
+    minWidth: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: "5%",
+    marginBottom: 25,
   },
   button: {
     width: 175,
