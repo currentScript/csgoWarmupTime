@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
-    height: "100%",
+    minHeight: "100%",
     backgroundColor: "#191C2B",
     overflow: "hidden",
   },
@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: "auto",
     position: "relative",
-    marginTop: "45%",
   },
   timeInfo: {
     fontSize: 45,
@@ -171,11 +170,11 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   buttonView: {
-    width: "100%",
+    minWidth: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: "5%",
+    marginBottom: 25,
   },
   button: {
     width: 175,
