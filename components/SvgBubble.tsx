@@ -55,7 +55,7 @@ export const SvgBubble: React.FC<SvgBubbleProps> = React.memo(({ isEnding, path 
 const styles = StyleSheet.create({
   svg: {
     position: "absolute",
-    opacity: 0.125,
+    opacity: 0.25,
     zIndex: 0,
     top: "-50%",
     left: "-100%",

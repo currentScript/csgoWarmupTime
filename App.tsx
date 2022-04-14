@@ -87,7 +87,9 @@ export default function App() {
               {
                 borderColor: borderopacityAnim.interpolate({
                   inputRange: [0, 0.5, 1],
-                  outputRange: ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"],
+                  outputRange: ending
+                    ? ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"]
+                    : ["rgba(255, 255, 255, 0.8)", "rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0.8)"],
                 }),
               },
             ]}
@@ -102,7 +104,9 @@ export default function App() {
               {
                 borderColor: borderopacityAnim.interpolate({
                   inputRange: [0, 0.5, 1],
-                  outputRange: ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"],
+                  outputRange: ending
+                    ? ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"]
+                    : ["rgba(255, 255, 255, 0.8)", "rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0.8)"],
                 }),
               },
             ]}
