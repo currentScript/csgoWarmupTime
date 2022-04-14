@@ -1,4 +1,4 @@
-import React, { isValidElement, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Animated, Easing, StyleSheet } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
@@ -55,7 +55,7 @@ export const SvgBubble: React.FC<SvgBubbleProps> = React.memo(({ isEnding, path 
 const styles = StyleSheet.create({
   svg: {
     position: "absolute",
-    opacity: 0.25,
+    opacity: 0.125,
     zIndex: 0,
     top: "-50%",
     left: "-100%",

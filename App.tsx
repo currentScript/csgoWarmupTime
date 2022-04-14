@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { CountdownComponent } from "./components/CountdownComponent";
+import { Animated, Easing, Pressable, StyleSheet, Text, View } from "react-native";
 import { SvgBubbles } from "./components/SvgBubbles";
+import { Countdown } from "./components/Countdown";
 
 interface TimeInterface {
   minutes: number;
@@ -10,6 +10,27 @@ interface TimeInterface {
 }
 
 export default function App() {
+  const borderopacityStartValue = 0;
+
+  const borderopacityAnim = useRef(new Animated.Value(borderopacityStartValue)).current;
+
+  const animate = () => {
+    Animated.loop(
+      Animated.timing(borderopacityAnim, {
+        toValue: 1,
+        useNativeDriver: false,
+        easing: Easing.ease,
+        duration: 5000,
+      })
+    ).start();
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      animate();
+    }, 200);
+  }, []);
+
   const [rerender, callRerender] = useState(false);
   const [time, setTime] = useState<TimeInterface>({ minutes: 0, seconds: 0 });
   const [ending, setEnding] = useState(false);
@@ -22,12 +43,12 @@ export default function App() {
   useEffect(() => {
     const ws = new WebSocket("");
     let isTimeSet = false;
+    let isLastMinuteSet = false;
 
     ws.onmessage = ({ data }) => {
       if (text1regex.test(data) || text2regex.test(data) || text3regex.test(data)) {
         data = data.replace(/WAITING FOR PLAYERS /i, ""); // only get the time
         data = data.replace(/ /i, "");
-        console.log(data);
         let minutes = +data.split(":")[0];
         let seconds = +data.split(":")[1];
 
@@ -42,9 +63,13 @@ export default function App() {
         }
 
         // update time when switching to last minute
-        if (minutes === 0 && seconds === 59) {
+        if (minutes === 0) {
+          if (isLastMinuteSet) {
+            return;
+          }
           // - 1 second because of delay
           setTime({ minutes, seconds: seconds - 1 });
+          isLastMinuteSet = true;
         }
       }
     };
@@ -56,11 +81,35 @@ export default function App() {
 
       <View style={styles.countdownView}>
         {isCountdownTimeSet && (
-          <Text style={styles.timeInfo}>
-            <CountdownComponent minutes={time.minutes} seconds={time.seconds} />
-          </Text>
+          <Animated.Text
+            style={[
+              styles.timeInfo,
+              {
+                borderColor: borderopacityAnim.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"],
+                }),
+              },
+            ]}
+          >
+            <Countdown startTime={time.minutes * 60 + time.seconds} key={time.minutes * 60 + time.seconds} />
+          </Animated.Text>
         )}
-        {!isCountdownTimeSet && <Text style={styles.timeInfo}>00:00:00</Text>}
+        {!isCountdownTimeSet && (
+          <Animated.Text
+            style={[
+              styles.timeInfo,
+              {
+                borderColor: borderopacityAnim.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: ["rgba(232, 81, 83, 0.6)", "rgba(232, 81, 83, 0.8)", "rgba(232, 81, 83, 0.6)"],
+                }),
+              },
+            ]}
+          >
+            <Text>0 : 00</Text>
+          </Animated.Text>
+        )}
         <SvgBubbles isEnding={ending} />
       </View>
 
@@ -110,6 +159,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     zIndex: 22,
     borderRadius: 11111,
+    borderWidth: 8,
     backgroundColor: "#191C2B",
     width: 250,
     height: 250,
