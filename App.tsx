@@ -41,7 +41,7 @@ export default function App() {
   const text3regex = /MATCH STARTING/;
 
   useEffect(() => {
-    const ws = new WebSocket("");
+    const ws = new WebSocket("ws://192.168.178.59:2211");
     let isTimeSet = false;
     let isLastMinuteSet = false;
 
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
-    minHeight: "100%",
+    height: "100%",
     backgroundColor: "#191C2B",
     overflow: "hidden",
   },
@@ -153,7 +153,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    margin: "auto",
+    // margin: "auto",
+    margin: "45%",
     position: "relative",
   },
   timeInfo: {
@@ -170,11 +171,12 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   buttonView: {
-    minWidth: "100%",
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 25,
+    marginBottom: "5%",
+    // marginBottom: 25,
   },
   button: {
     width: 175,
