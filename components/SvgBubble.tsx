@@ -18,7 +18,7 @@ export const SvgBubble: React.FC<SvgBubbleProps> = React.memo(({ isEnding, path 
         toValue: 360 + rotationStartValue,
         useNativeDriver: false,
         easing: Easing.linear,
-        duration: 10000 * Math.floor(Math.random() * 15),
+        duration: 10000 * Math.floor(Math.random() * 20),
       })
     ).start();
   };
@@ -55,7 +55,7 @@ export const SvgBubble: React.FC<SvgBubbleProps> = React.memo(({ isEnding, path 
 const styles = StyleSheet.create({
   svg: {
     position: "absolute",
-    opacity: 0.25,
+    opacity: 0.2,
     zIndex: 0,
     top: "-50%",
     left: "-100%",

@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.65 }],
   },
 });
