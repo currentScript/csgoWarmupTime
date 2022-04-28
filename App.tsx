@@ -41,7 +41,7 @@ export default function App() {
   const text3regex = /MATCH STARTING/;
 
   useEffect(() => {
-    const ws = new WebSocket("ws://192.168.178.59:2211");
+    const ws = new WebSocket(""); // ip address of the server
     let isTimeSet = false;
     let isLastMinuteSet = false;
 
